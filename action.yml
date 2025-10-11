@@ -1,0 +1,13 @@
+name: "1Password Secret Loader"
+description: "Load and inject env files containing op:// secrets into the workflow environment"
+author: "Alex Miller"
+
+inputs:
+  files:
+    description: "List of files"
+    required: true
+    default: ""
+
+runs:
+  using: node24
+  main: "dist/index.js"
