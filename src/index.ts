@@ -38,7 +38,7 @@ for (const [key, value] of Object.entries(combined)) {
     if (resolvedSecrets.individualResponses[value].content) resolveSuccessCount++
     else resolveErrorCount++
   }
-  const resolvedValue = resolvedSecrets.individualResponses[value].content?.secret ?? value
+  const resolvedValue = resolvedSecrets.individualResponses[value]?.content?.secret ?? value
   if (onlyOpRefs[key]) core.setSecret(resolvedValue)
   core.exportVariable(key, resolvedValue)
 }

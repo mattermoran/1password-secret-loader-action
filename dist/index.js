@@ -27887,7 +27887,7 @@ for (const [key, value] of Object.entries(combined)) {
         else
             resolveErrorCount++;
     }
-    const resolvedValue = resolvedSecrets.individualResponses[value].content?.secret ?? value;
+    const resolvedValue = resolvedSecrets.individualResponses[value]?.content?.secret ?? value;
     if (onlyOpRefs[key])
         _actions_core__WEBPACK_IMPORTED_MODULE_2__.setSecret(resolvedValue);
     _actions_core__WEBPACK_IMPORTED_MODULE_2__.exportVariable(key, resolvedValue);
