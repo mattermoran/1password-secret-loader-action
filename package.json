@@ -1,5 +1,5 @@
 {
-  "name": "1password-secret-loader",
+  "name": "1password-secret-loader-action",
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
