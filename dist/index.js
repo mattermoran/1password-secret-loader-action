@@ -27861,25 +27861,30 @@ _resolve_secrets_js__WEBPACK_IMPORTED_MODULE_3__ = (__webpack_async_dependencies
 
 const envFiles = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getMultilineInput('files');
 const combined = {};
-for (const path of envFiles) {
-    const file = dotenv__WEBPACK_IMPORTED_MODULE_0___default().parse(await node_fs_promises__WEBPACK_IMPORTED_MODULE_2___default().readFile(path));
-    Object.assign(combined, file);
-    _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Loaded ${Object.keys(file).length} items from ${path}`);
+try {
+    for (const path of envFiles) {
+        const file = dotenv__WEBPACK_IMPORTED_MODULE_0___default().parse(await node_fs_promises__WEBPACK_IMPORTED_MODULE_2___default().readFile(path));
+        Object.assign(combined, file);
+        _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Loaded ${Object.keys(file).length} items from ${path}`);
+    }
+    if (Object.keys(combined).length === 0) {
+        _actions_core__WEBPACK_IMPORTED_MODULE_1__.warning('Nothing to do here :)');
+        process.exit(0);
+    }
+    const opRefs = Object.fromEntries(Object.entries(combined).filter(([, value]) => value.startsWith('op://')));
+    const resolvedOpRefs = await (0,_resolve_secrets_js__WEBPACK_IMPORTED_MODULE_3__/* .resolveOpRefs */ .s)(opRefs);
+    for (const [key, value] of Object.entries(combined)) {
+        const resolvedOpRef = resolvedOpRefs[key] ?? value;
+        if (opRefs)
+            _actions_core__WEBPACK_IMPORTED_MODULE_1__.setSecret(resolvedOpRef);
+        _actions_core__WEBPACK_IMPORTED_MODULE_1__.exportVariable(key, resolvedOpRef);
+    }
+    _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Exported items: ${Object.keys(combined).length}`);
+    _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Resolved secrets: ${Object.keys(opRefs).length}`);
 }
-if (Object.keys(combined).length === 0) {
-    _actions_core__WEBPACK_IMPORTED_MODULE_1__.warning('Nothing to do here :)');
-    process.exit(0);
+catch (e) {
+    _actions_core__WEBPACK_IMPORTED_MODULE_1__.setFailed(`Error: ${e.message}`);
 }
-const opRefs = Object.fromEntries(Object.entries(combined).filter(([, value]) => value.startsWith('op://')));
-const resolvedOpRefs = await (0,_resolve_secrets_js__WEBPACK_IMPORTED_MODULE_3__/* .resolveOpRefs */ .s)(opRefs);
-for (const [key, value] of Object.entries(combined)) {
-    const resolvedOpRef = resolvedOpRefs[key] ?? value;
-    if (opRefs)
-        _actions_core__WEBPACK_IMPORTED_MODULE_1__.setSecret(resolvedOpRef);
-    _actions_core__WEBPACK_IMPORTED_MODULE_1__.exportVariable(key, resolvedOpRef);
-}
-_actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Exported items: ${Object.keys(combined).length}`);
-_actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Resolved secrets: ${Object.keys(opRefs).length}`);
 
 __webpack_async_result__();
 } catch(e) { __webpack_async_result__(e); } }, 1);
