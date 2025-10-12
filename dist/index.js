@@ -1425,7 +1425,7 @@ _ItemsShares_inner = new WeakMap();
 
 /***/ }),
 
-/***/ 218:
+/***/ 7837:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 
@@ -5470,12 +5470,12 @@ module.exports = DotenvModule
 /***/ 770:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-module.exports = __nccwpck_require__(7837);
+module.exports = __nccwpck_require__(218);
 
 
 /***/ }),
 
-/***/ 7837:
+/***/ 218:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
@@ -27846,53 +27846,86 @@ module.exports = {
 /***/ ((module, __unused_webpack___webpack_exports__, __nccwpck_require__) => {
 
 __nccwpck_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {
-/* harmony import */ var _1password_sdk__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(218);
+/* harmony import */ var dotenv__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(8889);
+/* harmony import */ var dotenv__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(dotenv__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(7484);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var node_fs_promises__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(1455);
+/* harmony import */ var node_fs_promises__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__nccwpck_require__.n(node_fs_promises__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _resolve_secrets_js__WEBPACK_IMPORTED_MODULE_3__ = __nccwpck_require__(3783);
+var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([_resolve_secrets_js__WEBPACK_IMPORTED_MODULE_3__]);
+_resolve_secrets_js__WEBPACK_IMPORTED_MODULE_3__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
+
+
+
+
+const envFiles = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getMultilineInput('files');
+const combined = {};
+for (const path of envFiles) {
+    const file = dotenv__WEBPACK_IMPORTED_MODULE_0___default().parse(await node_fs_promises__WEBPACK_IMPORTED_MODULE_2___default().readFile(path));
+    Object.assign(combined, file);
+    _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Loaded ${Object.keys(file).length} items from ${path}`);
+}
+if (Object.keys(combined).length === 0) {
+    _actions_core__WEBPACK_IMPORTED_MODULE_1__.warning('Nothing to do here :)');
+    process.exit(0);
+}
+const opRefs = Object.fromEntries(Object.entries(combined).filter(([, value]) => value.startsWith('op://')));
+const resolvedOpRefs = await (0,_resolve_secrets_js__WEBPACK_IMPORTED_MODULE_3__/* .resolveOpRefs */ .s)(opRefs);
+for (const [key, value] of Object.entries(combined)) {
+    const resolvedOpRef = resolvedOpRefs[key] ?? value;
+    if (opRefs)
+        _actions_core__WEBPACK_IMPORTED_MODULE_1__.setSecret(resolvedOpRef);
+    _actions_core__WEBPACK_IMPORTED_MODULE_1__.exportVariable(key, resolvedOpRef);
+}
+_actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Exported items: ${Object.keys(combined).length}`);
+_actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Resolved secrets: ${Object.keys(opRefs).length}`);
+
+__webpack_async_result__();
+} catch(e) { __webpack_async_result__(e); } }, 1);
+
+/***/ }),
+
+/***/ 3783:
+/***/ ((module, __webpack_exports__, __nccwpck_require__) => {
+
+__nccwpck_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {
+/* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
+/* harmony export */   s: () => (/* binding */ resolveOpRefs)
+/* harmony export */ });
+/* harmony import */ var _1password_sdk__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(7837);
 /* harmony import */ var _1password_sdk__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_1password_sdk__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var dotenv__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(8889);
-/* harmony import */ var dotenv__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(dotenv__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(7484);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var node_fs_promises__WEBPACK_IMPORTED_MODULE_3__ = __nccwpck_require__(1455);
-/* harmony import */ var node_fs_promises__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__nccwpck_require__.n(node_fs_promises__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(7484);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_1__);
 
 
-
-
-const envFiles = _actions_core__WEBPACK_IMPORTED_MODULE_2__.getMultilineInput('files');
 const client = await (0,_1password_sdk__WEBPACK_IMPORTED_MODULE_0__.createClient)({
     auth: process.env.OP_SERVICE_ACCOUNT_TOKEN,
     integrationName: '1Password Secret Loader',
     integrationVersion: '1.0.0',
 });
-const combined = {};
-for (const path of envFiles) {
-    try {
-        const file = dotenv__WEBPACK_IMPORTED_MODULE_1___default().parse(await node_fs_promises__WEBPACK_IMPORTED_MODULE_3___default().readFile(path));
-        Object.assign(combined, file);
-        _actions_core__WEBPACK_IMPORTED_MODULE_2__.info(`Loaded ${Object.keys(file).length} items from ${path}`);
+async function resolveOpRefs(opRefs) {
+    const resolved = {};
+    const result = await client.secrets.resolveAll(Object.values(opRefs));
+    let failedCount = 0;
+    for (const [key, value] of Object.entries(opRefs)) {
+        const response = result.individualResponses[value];
+        if (response?.content) {
+            resolved[key] = response.content.secret;
+            continue;
+        }
+        // secret not found for some reason
+        failedCount++;
+        const errorMessage = response?.error
+            ? `type: ${response.error.type}${response.error.message ? `message: ${response.error.message}` : ''}`
+            : 'not found';
+        _actions_core__WEBPACK_IMPORTED_MODULE_1__.error(`Failed to resolve ${key}=${value}: ${errorMessage}`);
     }
-    catch (e) {
-        _actions_core__WEBPACK_IMPORTED_MODULE_2__.warning(`Failed to load ${path}: ${e.message}`);
+    if (failedCount > 0) {
+        throw new Error(`Failed to resolve ${failedCount} secrets`);
     }
+    return resolved;
 }
-const onlyOpRefs = Object.fromEntries(Object.entries(combined).filter(([, value]) => value.startsWith('op://')));
-_actions_core__WEBPACK_IMPORTED_MODULE_2__.info(`Resolving ${Object.keys(onlyOpRefs).length} secrets`);
-const resolvedSecrets = await client.secrets.resolveAll(Object.values(onlyOpRefs));
-let resolveSuccessCount = 0;
-let resolveErrorCount = 0;
-for (const [key, value] of Object.entries(combined)) {
-    if (resolvedSecrets.individualResponses[value]) {
-        if (resolvedSecrets.individualResponses[value].content)
-            resolveSuccessCount++;
-        else
-            resolveErrorCount++;
-    }
-    const resolvedValue = resolvedSecrets.individualResponses[value]?.content?.secret ?? value;
-    if (onlyOpRefs[key])
-        _actions_core__WEBPACK_IMPORTED_MODULE_2__.setSecret(resolvedValue);
-    _actions_core__WEBPACK_IMPORTED_MODULE_2__.exportVariable(key, resolvedValue);
-}
-_actions_core__WEBPACK_IMPORTED_MODULE_2__.info(`Resolved ${resolveSuccessCount} secrets. Failed: ${resolveErrorCount}`);
 
 __webpack_async_result__();
 } catch(e) { __webpack_async_result__(e); } }, 1);
