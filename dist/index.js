@@ -27883,7 +27883,7 @@ try {
     _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`Resolved secrets: ${Object.keys(opRefs).length}`);
 }
 catch (e) {
-    _actions_core__WEBPACK_IMPORTED_MODULE_1__.setFailed(`Error: ${e.message}`);
+    _actions_core__WEBPACK_IMPORTED_MODULE_1__.setFailed(e instanceof Error ? e.message : String(e));
 }
 
 __webpack_async_result__();

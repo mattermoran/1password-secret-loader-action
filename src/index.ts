@@ -34,5 +34,5 @@ try {
   core.info(`Exported items: ${Object.keys(combined).length}`)
   core.info(`Resolved secrets: ${Object.keys(opRefs).length}`)
 } catch (e) {
-  core.setFailed(`Error: ${(e as Error).message}`)
+  core.setFailed(e instanceof Error ? e.message : String(e))
 }
