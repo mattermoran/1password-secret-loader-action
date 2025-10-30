@@ -27875,7 +27875,7 @@ try {
     const resolvedOpRefs = await (0,_resolve_secrets_js__WEBPACK_IMPORTED_MODULE_3__/* .resolveOpRefs */ .s)(opRefs);
     for (const [key, value] of Object.entries(combined)) {
         const resolvedOpRef = resolvedOpRefs[key] ?? value;
-        if (opRefs)
+        if (opRefs[key])
             _actions_core__WEBPACK_IMPORTED_MODULE_1__.setSecret(resolvedOpRef);
         _actions_core__WEBPACK_IMPORTED_MODULE_1__.exportVariable(key, resolvedOpRef);
     }
