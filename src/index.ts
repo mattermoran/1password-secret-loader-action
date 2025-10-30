@@ -27,7 +27,7 @@ try {
 
   for (const [key, value] of Object.entries(combined)) {
     const resolvedOpRef = resolvedOpRefs[key] ?? value
-    if (opRefs) core.setSecret(resolvedOpRef)
+    if (opRefs[key]) core.setSecret(resolvedOpRef)
     core.exportVariable(key, resolvedOpRef)
   }
 
